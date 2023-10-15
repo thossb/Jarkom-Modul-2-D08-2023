@@ -1,6 +1,37 @@
 # Jarkom-Modul-2-D08-2023
 
-## Setup dan nomer (1,2,3)
+## Soal
+1. Yudhistira akan digunakan sebagai DNS Master, Werkudara sebagai DNS Slave, Arjuna merupakan Load Balancer yang terdiri dari beberapa Web Server yaitu Prabakusuma, Abimanyu, dan Wisanggeni. Buatlah topologi dengan pembagian sebagai berikut. Folder topologi dapat diakses pada drive berikut 
+2. Buatlah website utama pada node arjuna dengan akses ke arjuna.yyy.com dengan alias www.arjuna.yyy.com dengan yyy merupakan kode kelompok.
+3. Dengan cara yang sama seperti soal nomor 2, buatlah website utama dengan akses ke abimanyu.yyy.com dan alias www.abimanyu.yyy.com.
+4. Kemudian, karena terdapat beberapa web yang harus di-deploy, buatlah subdomain parikesit.abimanyu.yyy.com yang diatur DNS-nya di Yudhistira dan mengarah ke Abimanyu.
+5. Buat juga reverse domain untuk domain utama. (Abimanyu saja yang direverse)
+6. Agar dapat tetap dihubungi ketika DNS Server Yudhistira bermasalah, buat juga Werkudara sebagai DNS Slave untuk domain utama.
+7. Seperti yang kita tahu karena banyak sekali informasi yang harus diterima, buatlah subdomain khusus untuk perang yaitu baratayuda.abimanyu.yyy.com dengan alias www.baratayuda.abimanyu.yyy.com yang didelegasikan dari Yudhistira ke Werkudara dengan IP menuju ke Abimanyu dalam folder Baratayuda.
+8. Untuk informasi yang lebih spesifik mengenai Ranjapan Baratayuda, buatlah subdomain melalui Werkudara dengan akses rjp.baratayuda.abimanyu.yyy.com dengan alias www.rjp.baratayuda.abimanyu.yyy.com yang mengarah ke Abimanyu.
+9. Arjuna merupakan suatu Load Balancer Nginx dengan tiga worker (yang juga menggunakan nginx sebagai webserver) yaitu Prabakusuma, Abimanyu, dan Wisanggeni. Lakukan deployment pada masing-masing worker.
+10. Kemudian gunakan algoritma Round Robin untuk Load Balancer pada Arjuna. Gunakan server_name pada soal nomor 1. Untuk melakukan pengecekan akses alamat web tersebut kemudian pastikan worker yang digunakan untuk menangani permintaan akan berganti ganti secara acak. Untuk webserver di masing-masing worker wajib berjalan di port 8001-8003. Contoh
+    - Prabakusuma:8001
+    - Abimanyu:8002
+    - Wisanggeni:8003
+11. Selain menggunakan Nginx, lakukan konfigurasi Apache Web Server pada worker Abimanyu dengan web server www.abimanyu.yyy.com. Pertama dibutuhkan web server dengan DocumentRoot pada /var/www/abimanyu.yyy
+12. Setelah itu ubahlah agar url www.abimanyu.yyy.com/index.php/home menjadi www.abimanyu.yyy.com/home.
+13. Selain itu, pada subdomain www.parikesit.abimanyu.yyy.com, DocumentRoot disimpan pada /var/www/parikesit.abimanyu.yyy
+14. Pada subdomain tersebut folder /public hanya dapat melakukan directory listing sedangkan pada folder /secret tidak dapat diakses (403 Forbidden).
+15. Buatlah kustomisasi halaman error pada folder /error untuk mengganti error kode pada Apache. Error kode yang perlu diganti adalah 404 Not Found dan 403 Forbidden.
+16. Buatlah suatu konfigurasi virtual host agar file asset www.parikesit.abimanyu.yyy.com/public/js menjadi 
+www.parikesit.abimanyu.yyy.com/js 
+17. Agar aman, buatlah konfigurasi agar www.rjp.baratayuda.abimanyu.yyy.com hanya dapat diakses melalui port 14000 dan 14400.
+18. Untuk mengaksesnya buatlah autentikasi username berupa “Wayang” dan password “baratayudayyy” dengan yyy merupakan kode kelompok. Letakkan DocumentRoot pada /var/www/rjp.baratayuda.abimanyu.yyy.
+19. Buatlah agar setiap kali mengakses IP dari Abimanyu akan secara otomatis dialihkan ke www.abimanyu.yyy.com (alias)
+20. Karena website www.parikesit.abimanyu.yyy.com semakin banyak pengunjung dan banyak gambar gambar random, maka ubahlah request gambar yang memiliki substring “abimanyu” akan diarahkan menuju abimanyu.png.
+
+PS:
+yyy pada url adalah kode kelompok anda
+File requirement dapat diakses melalui drive berikut.
+
+## Langkah - langkah penyelesaian
+### Setup dan nomer (1,2,3)
 1.	Susun topologi dan koneksi
 ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/15934f35-f4cd-4149-9285-3bd004a9f58d)
 ```
@@ -76,22 +107,22 @@ iface eth0 inet static
 10.	Restart bind9 dengan perintah service bind9 restart
 11.	Arahkan client nakula dan sadewa dengan nano /etc/resolv.conf dan tulis nameserver ip dns master kita, untuk mencoba ping arjuna dan abimanyu
 
-## Lakukan DNS forwarding, agar bisa akses internet
+### Lakukan DNS forwarding, agar bisa akses internet
 11.	edit file /etc/bind/named.conf.options pada server dns master
 	 ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/0402704f-1553-4bfd-a599-3390133b15bb)
 12.	service bind9 restart dan coba ping google.com
 
-## Menyiapkan backup pada .bashrc
+### Menyiapkan backup pada .bashrc
 13.	Tulis code berikut pada /root/.bashrc (lakukan pada dns server)
 ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/d6894d53-34c2-4a82-83c3-0fa4d970a5f0)
 14.	Lalu kita mkdir /root/prak1/bind lalu lakukan cp -r -f /etc/bind /root/prak1 setiap memodifikasi file bind untuk menyimpan /etc/bind, sehingga konfigurasi bind bisa dipanggil saat kita memulai project di bash script
 
-## Membuat subdomain (nomor 4)
+### Membuat subdomain (nomor 4)
 15.	 Membuat parikesit.abimanyu.yyy.com yang diatur DNS-nya di Yudhistira dan mengarah ke Abimanyu.
 16.	Atur di nano /etc/bind/prak1/abimanyu pada dns master (yudhistira) masukan parsekit in a - lalu ip node abimanyu
 17.	Save, bind restart, dan coba ping
 
-## Membuat reverse domain abimanyu (nomer 5)
+### Membuat reverse domain abimanyu (nomer 5)
 18.	Edit file /etc/bind/named.conf.local pada dns master
 19.	Tambah domain reverse dari ip abimanyu </br>
 ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/0dee95b3-ec2e-4f80-aa22-5c81910ac9e9)
@@ -105,7 +136,7 @@ Hasilnya </br>
 ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/4c9678b9-471a-4042-8e73-1378ac972035)
 24.	Masukan apt-get update dan install dns utils ke /root/.bashscr client, agar otomatis dimulai saat memulai project.
 
-## Membuat DNS slave untuk (nomor 6)
+### Membuat DNS slave untuk (nomor 6)
 25.	Pertama kita konfigurasi bind dns master, Edit file /etc/bind/named.conf.local dan sesuaikan dengan syntax berikut
  ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/48ece8a5-6e0e-4043-86d1-3b48072f917d)
 Tambahkan pada domain arjuna dan abimanyu
@@ -136,7 +167,7 @@ Nameserver IP DNS slave
 *note backup konfigurasi dns slave dan master ke root/bind/ seperti cara diatas (termasuk update dan install bind di bash script). </br>
 *note masukan echo nameserver dns master dan slave, Juga masukan apt-get update dan install dns utils ke /root/.bashscr client, agar otomatis dimulai saat memulai project. </br>
 
-## Membuat subdomain baratayuda di dns slave setelah diarahkan dari dns master (nomor 7) 
+### Membuat subdomain baratayuda di dns slave setelah diarahkan dari dns master (nomor 7) 
 
 
 
