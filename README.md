@@ -1,5 +1,10 @@
 # Jarkom-Modul-2-D08-2023
 
+Nama Anggota | NRP
+------------------- | --------------		
+Timothy Hosia Budianto | 5025211098
+Arif Nugraha Santosa | 5025211048
+
 ## Soal
 1. Yudhistira akan digunakan sebagai DNS Master, Werkudara sebagai DNS Slave, Arjuna merupakan Load Balancer yang terdiri dari beberapa Web Server yaitu Prabakusuma, Abimanyu, dan Wisanggeni. Buatlah topologi dengan pembagian sebagai berikut. Folder topologi dapat diakses pada drive berikut 
 2. Buatlah website utama pada node arjuna dengan akses ke arjuna.yyy.com dengan alias www.arjuna.yyy.com dengan yyy merupakan kode kelompok.
@@ -167,7 +172,30 @@ Nameserver IP DNS slave
 *note backup konfigurasi dns slave dan master ke root/bind/ seperti cara diatas (termasuk update dan install bind di bash script). </br>
 *note masukan echo nameserver dns master dan slave, Juga masukan apt-get update dan install dns utils ke /root/.bashscr client, agar otomatis dimulai saat memulai project. </br>
 
-### Membuat subdomain baratayuda di dns slave setelah diarahkan dari dns master (nomor 7) 
+### Membuat subdomain baratayuda di dns slave setelah diarahkan dari dns master (nomor 7 dan nomor 8) 
+32. pertama modifikasikonfigurasi abimanyu.d08.com pada /etc/bind/prak1 di dnsmaster untuk prefix baratayuda diarahkan ke dns slave menjadi
+![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/7c900e77-2749-4a48-94f8-c56689414c67)
+33. jangan lupa untuk modifikasi named.conf.options comment dnssec-validation auto; dan tambahkan allow-query{any;}; // pada dns master dan slave
+34. juga pastikan named.nonf.local domain abimanyu di beri allow transfer ke dns slave lalu restart bind9.
+35. Lalu modifikasi domain baratayuda.abimanyu.d08.com pada dns slave menjadi seperti berikut
+![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/9b290749-7259-43e3-92cf-ded0afb89da4)
+36. Lalu buat direktori mkdir /etc/bind/delegasi dan buat file untuk mengkonfigurasi bind baratayuda dengan cp /etc/bind/db.local ke direktori didalam delegasi.
+37. kemudian edit file baratayuda... menjadi seperti berikut 
+![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/f9095378-7bba-4270-a5ed-c7da54c08b5b)
+38. Lakukan restart bind9 llalu testing dengan ping ke domain domain yang baru dibuat tersebut
+
+### Nomor 9
+### Nomor 10
+### Nomor 11
+### Nomor 12
+### Nomor 13
+### Nomor 14
+### Nomor 15
+### Nomor 16
+### Nomor 17
+### Nomor 18
+### Nomor 19
+### Nomor 20
 
 
 
