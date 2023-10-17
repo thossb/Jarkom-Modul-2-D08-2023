@@ -5,36 +5,6 @@ Nama Anggota | NRP
 Timothy Hosia Budianto | 5025211098
 Arif Nugraha Santosa | 5025211048
 
-## Soal
-1. Yudhistira akan digunakan sebagai DNS Master, Werkudara sebagai DNS Slave, Arjuna merupakan Load Balancer yang terdiri dari beberapa Web Server yaitu Prabakusuma, Abimanyu, dan Wisanggeni. Buatlah topologi dengan pembagian sebagai berikut. Folder topologi dapat diakses pada drive berikut 
-2. Buatlah website utama pada node arjuna dengan akses ke arjuna.yyy.com dengan alias www.arjuna.yyy.com dengan yyy merupakan kode kelompok.
-3. Dengan cara yang sama seperti soal nomor 2, buatlah website utama dengan akses ke abimanyu.yyy.com dan alias www.abimanyu.yyy.com.
-4. Kemudian, karena terdapat beberapa web yang harus di-deploy, buatlah subdomain parikesit.abimanyu.yyy.com yang diatur DNS-nya di Yudhistira dan mengarah ke Abimanyu.
-5. Buat juga reverse domain untuk domain utama. (Abimanyu saja yang direverse)
-6. Agar dapat tetap dihubungi ketika DNS Server Yudhistira bermasalah, buat juga Werkudara sebagai DNS Slave untuk domain utama.
-7. Seperti yang kita tahu karena banyak sekali informasi yang harus diterima, buatlah subdomain khusus untuk perang yaitu baratayuda.abimanyu.yyy.com dengan alias www.baratayuda.abimanyu.yyy.com yang didelegasikan dari Yudhistira ke Werkudara dengan IP menuju ke Abimanyu dalam folder Baratayuda.
-8. Untuk informasi yang lebih spesifik mengenai Ranjapan Baratayuda, buatlah subdomain melalui Werkudara dengan akses rjp.baratayuda.abimanyu.yyy.com dengan alias www.rjp.baratayuda.abimanyu.yyy.com yang mengarah ke Abimanyu.
-9. Arjuna merupakan suatu Load Balancer Nginx dengan tiga worker (yang juga menggunakan nginx sebagai webserver) yaitu Prabakusuma, Abimanyu, dan Wisanggeni. Lakukan deployment pada masing-masing worker.
-10. Kemudian gunakan algoritma Round Robin untuk Load Balancer pada Arjuna. Gunakan server_name pada soal nomor 1. Untuk melakukan pengecekan akses alamat web tersebut kemudian pastikan worker yang digunakan untuk menangani permintaan akan berganti ganti secara acak. Untuk webserver di masing-masing worker wajib berjalan di port 8001-8003. Contoh
-    - Prabakusuma:8001
-    - Abimanyu:8002
-    - Wisanggeni:8003
-11. Selain menggunakan Nginx, lakukan konfigurasi Apache Web Server pada worker Abimanyu dengan web server www.abimanyu.yyy.com. Pertama dibutuhkan web server dengan DocumentRoot pada /var/www/abimanyu.yyy
-12. Setelah itu ubahlah agar url www.abimanyu.yyy.com/index.php/home menjadi www.abimanyu.yyy.com/home.
-13. Selain itu, pada subdomain www.parikesit.abimanyu.yyy.com, DocumentRoot disimpan pada /var/www/parikesit.abimanyu.yyy
-14. Pada subdomain tersebut folder /public hanya dapat melakukan directory listing sedangkan pada folder /secret tidak dapat diakses (403 Forbidden).
-15. Buatlah kustomisasi halaman error pada folder /error untuk mengganti error kode pada Apache. Error kode yang perlu diganti adalah 404 Not Found dan 403 Forbidden.
-16. Buatlah suatu konfigurasi virtual host agar file asset www.parikesit.abimanyu.yyy.com/public/js menjadi 
-www.parikesit.abimanyu.yyy.com/js 
-17. Agar aman, buatlah konfigurasi agar www.rjp.baratayuda.abimanyu.yyy.com hanya dapat diakses melalui port 14000 dan 14400.
-18. Untuk mengaksesnya buatlah autentikasi username berupa “Wayang” dan password “baratayudayyy” dengan yyy merupakan kode kelompok. Letakkan DocumentRoot pada /var/www/rjp.baratayuda.abimanyu.yyy.
-19. Buatlah agar setiap kali mengakses IP dari Abimanyu akan secara otomatis dialihkan ke www.abimanyu.yyy.com (alias)
-20. Karena website www.parikesit.abimanyu.yyy.com semakin banyak pengunjung dan banyak gambar gambar random, maka ubahlah request gambar yang memiliki substring “abimanyu” akan diarahkan menuju abimanyu.png.
-
-PS:
-yyy pada url adalah kode kelompok anda
-File requirement dapat diakses melalui drive berikut.
-
 ## IP ADDRESS KELOMPOK D08
 ### DNS Server:
 Werkudara (DNS Slave):
@@ -118,19 +88,81 @@ eth3: 192.195.3.1 (ke client)
 ```
 
 ## PENYELESAIAN
-### Setup nomor 1, 2, dan 3
-1.	Susun topologi dan koneksi seperti pada gambar di bawah.
+
+### ⭕ Nomor 1
+Yudhistira akan digunakan sebagai DNS Master, Werkudara sebagai DNS Slave, Arjuna merupakan Load Balancer yang terdiri dari beberapa Web Server yaitu Prabakusuma, Abimanyu, dan Wisanggeni. Buatlah topologi dengan pembagian sebagai berikut. Folder topologi dapat diakses pada drive berikut.
+
+### 🟢 Jawaban Nomor 1
+### 1️⃣ Membuat Topologi
+- Susun topologi dan koneksi tiap node seperti pada gambar di bawah.
+
 ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/87381d4c-5abb-48f8-b2be-799ae314beaf)
 
-3.	Set iptable di router (**iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE -s 192.195.0.0/16**), dan taruh di bash script agar tidak hilang
-4.	Echo nameserver di node terluar, untuk connect dengan router agar terconnect dengan internet, dan taro di bashscript agar tidak perlu diulang (**echo nameserver 192.168.122.1 > /etc/resolv.conf**)
-5.	Instalasi bind di dns master
-6.	Buat domain di nano /etc/bind/named.conf.local
-7.	Buat directory untuk menyimpan konfigurasi domain yaitu prak1
-8.	Copy db.local pada path /etc/bind ke dalam folder prak1 yang baru saja dibuat dan ubah namanya menjadi arjuna.d08.com dan abimanyu.d08.com
-9.	Kemudian konfigurasi arjuna.d08.com dan abimanyu.d08.com
+- Set iptable di router (**iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE -s 192.195.0.0/16**).
+
+- Echo nameserver di node DNS Server dan DNS Server, untuk connect dengan router agar terconnect dengan internet `echo nameserver 192.168.122.1 > /etc/resolv.conf`
+
+### ⭕ Nomor 2 & Nomor 3
+
+Buatlah website utama pada node arjuna dengan akses ke arjuna.yyy.com dengan alias www.arjuna.yyy.com dengan yyy merupakan kode kelompok.
+
+Dengan cara yang sama seperti soal nomor 2, buatlah website utama dengan akses ke abimanyu.yyy.com dan alias www.abimanyu.yyy.com.
+
+### 🟢 Jawaban Nomor 2 & Nomor 3
+### 2️⃣&3️⃣ Membuat Topologi
+
+- Pada nomor 2 dan 3, kita akan fokus untuk melakukan konfigurasi DNS Server terlebih dahulu pada `Yudhistira` dan `Werkudara`
+
+- Pertama, instalasi bind pada `Yudhistira` dan `Werkudara` dengan menggunakan command:
+```
+apt-get update
+apt-get install bind9 -y
+```
+- Lalu pada `Yudhistira` setting konfigurasi local dengan command:
+```
+nano /etc/bind/named.conf.local
+```
+- Tambahkan konfigurasi berikut:
+```
+zone "arjuna.d08.com" {
+        type master;
+        file "/etc/bind/prak1/arjuna.d08.com";
+};
+
+zone "abimanyu.d08.com" {
+        type master;
+        file "/etc/bind/prak1/abimanyu.d08.com";
+};
+```
+![image23](./assets//images/NO23A.png)
+
+- Kemudian buatlah direktori `prak1` dalam folder `/etc/bind`.
+```
+mkdir /etc/bind/prak1
+```
+
+- Copy file db.local pada path `/etc/bind` ke dalam folder `prak1` yang baru saja dibuat dan ubah namanya menjadi `arjuna.d08.com` dan `abimanyu.d08.com`
+```
+cp /etc/bind/db.local /etc/bind/prak1/arjuna.d08.com
+```
+👆🏻Untuk zone `arjuna.d08.com` 👇🏻Untuk zone `abimanyu.d08.com`
+```
+cp /etc/bind/db.local /etc/bind/prak1/abimanyu.d08.com
+```
+
+- Kemudian konfigurasi `arjuna.d08.com` dan `abimanyu.d08.com`
+
+`Zone arjuna.d08.com`
 ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/d3e426a5-0437-441d-93d9-7a656f61d8f3)
+
+`Zone abimanyu.d08.com`
 ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/2689aab4-6abe-4bc1-a339-50fdc7b2655b)
+
+### 2️⃣&3️⃣ Testing Nomor 2 & Nomor 3
+
+
+
+9.	
 
 10.	Restart bind9 dengan perintah service bind9 restart
 11.	Arahkan client nakula dan sadewa dengan nano /etc/resolv.conf dan tulis nameserver ip dns master kita, untuk mencoba ping arjuna dan abimanyu
@@ -838,7 +870,7 @@ service apache2 restart
 
 ![Image19](./assets/images/NO19D.png)
 
-### ⭕ Nomor 19
+### ⭕ Nomor 20
 Karena website www.parikesit.abimanyu.yyy.com semakin banyak pengunjung dan banyak gambar gambar random, maka ubahlah request gambar yang memiliki substring “abimanyu” akan diarahkan menuju abimanyu.png.
 
 ### 🟢 Jawaban Nomor 20
