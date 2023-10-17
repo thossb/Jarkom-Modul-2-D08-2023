@@ -5,7 +5,7 @@ Nama Anggota | NRP
 Timothy Hosia Budianto | 5025211098
 Arif Nugraha Santosa | 5025211048
 
-## 🟩🟩 IP ADDRESS KELOMPOK D08 🟩🟩 
+## 🟩🟩 LINK PROJECT 🟩🟩 
 Link: [Click Here!](https://drive.google.com/file/d/13KvDBt1N_wNV5d9MuCrY-Vgc-jtHhDOE/view?usp=sharing)
 
 ## 🟩🟩 IP ADDRESS KELOMPOK D08 🟩🟩 
