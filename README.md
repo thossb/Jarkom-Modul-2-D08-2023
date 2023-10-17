@@ -109,7 +109,7 @@ Buatlah website utama pada node arjuna dengan akses ke arjuna.yyy.com dengan ali
 Dengan cara yang sama seperti soal nomor 2, buatlah website utama dengan akses ke abimanyu.yyy.com dan alias www.abimanyu.yyy.com.
 
 ### 🟢 Jawaban Nomor 2 & Nomor 3
-### 2️⃣&3️⃣ Membuat Topologi
+### 2️⃣&3️⃣ Membuat DNS Server
 
 - Pada nomor 2 dan 3, kita akan fokus untuk melakukan konfigurasi DNS Server terlebih dahulu pada `Yudhistira` dan `Werkudara`
 
@@ -134,7 +134,7 @@ zone "abimanyu.d08.com" {
         file "/etc/bind/prak1/abimanyu.d08.com";
 };
 ```
-![image23](./assets//images/NO23A.png)
+![image23](./assets/images/NO23A.png)
 
 - Kemudian buatlah direktori `prak1` dalam folder `/etc/bind`.
 ```
@@ -153,93 +153,260 @@ cp /etc/bind/db.local /etc/bind/prak1/abimanyu.d08.com
 - Kemudian konfigurasi `arjuna.d08.com` dan `abimanyu.d08.com`
 
 `Zone arjuna.d08.com`
+
 ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/d3e426a5-0437-441d-93d9-7a656f61d8f3)
 
 `Zone abimanyu.d08.com`
+
 ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/2689aab4-6abe-4bc1-a339-50fdc7b2655b)
+
+- Lakukan DNS forwarding, agar client dapat mengakses internet. Edit file `/etc/bind/named.conf.options` Pada server DNS Master
+
+Nyalakan forwaders agar mengarah ke `192.168.122.1`
+
+![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/7ed74e10-421f-4d05-b126-6f9fec1ca860)
+
+- Lalu restart bind9nya dengan command:
+```
+service bind9 restart
+```
+
+- Arahkan nameserver `nakula` dan `sadewa` dengan dan tulis nameserver ip dns master kita, untuk mencoba ping arjuna dan abimanyu:
+```
+nano /etc/resolv.conf
+```
+Berisi:
+```
+nameserver 192.195.1.3
+nameserver 192.195.1.2
+```
 
 ### 2️⃣&3️⃣ Testing Nomor 2 & Nomor 3
 
+- Ping dengan domain `arjuna.d08.com` dan `abimanyu.d08.com` serta coba ping dengan menggunakan aliasnya:
 
+![image23](./assets/images/NO23B.png)
+![image23](./assets/images/NO23C.png)
 
-9.	
+Ping sudah berhasil dan domain arjuna mengarah ke ip arjuna, dan domain abimanyu mengarah ke domain abimanyu.
 
-10.	Restart bind9 dengan perintah service bind9 restart
-11.	Arahkan client nakula dan sadewa dengan nano /etc/resolv.conf dan tulis nameserver ip dns master kita, untuk mencoba ping arjuna dan abimanyu
+- Ping ke `google.com`
 
-### Lakukan DNS forwarding, agar bisa akses internet
-11.	edit file /etc/bind/named.conf.options pada server dns master
-![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/7ed74e10-421f-4d05-b126-6f9fec1ca860)
-12.	service bind9 restart dan coba ping google.com
+![image23](./assets/images/NO23D.png)
 
-### Menyiapkan backup pada .bashrc
-13.	Tulis code berikut pada /root/.bashrc (lakukan pada dns server)
-![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/ded58241-08c3-4c99-9c31-e443e2a02e05)
+### ⭕ Nomor 4
+Kemudian, karena terdapat beberapa web yang harus di-deploy, buatlah subdomain parikesit.abimanyu.yyy.com yang diatur DNS-nya di Yudhistira dan mengarah ke Abimanyu.
 
-14.	Lalu kita mkdir /root/prak1/bind lalu lakukan cp -r -f /etc/bind /root/prak1 setiap memodifikasi file bind untuk menyimpan /etc/bind, sehingga konfigurasi bind bisa dipanggil saat kita memulai project di bash script
+### 🟢 Jawaban Nomor 4
+### 4️⃣ Membuat Subdomain parikesit
 
-### Membuat subdomain (nomor 4)
-15.	 Membuat parikesit.abimanyu.yyy.com yang diatur DNS-nya di Yudhistira dan mengarah ke Abimanyu.
-16.	Atur di nano /etc/bind/prak1/abimanyu pada dns master (yudhistira) masukan parsekit in a - lalu ip node abimanyu
-17.	Save, bind restart, dan coba ping
+- Gunakan command `nano /etc/bind/prak1/abimanyu.d08.com`dan masukan konfigurasi yang ditandai berwarna merah pada gambar di bawah:
 
-### Membuat reverse domain abimanyu (nomer 5)
-18.	Edit file /etc/bind/named.conf.local pada dns master
-19.	Tambah domain reverse dari ip abimanyu 
-20.	Copykan file db.local dari path /etc/bind ke dalam folder prak1 yang baru saja dibuat dan ubah namanya menjadi 2.168.192.in-addr.arpa
-21.	Edit file 2.168.192.in-addr.arpa menjadi seperti gambar di bawah ini </br>
-![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/3b366553-e330-43a9-ad45-2f264ff54d53)
+![image4](./assets/images/NO4A.png)
 
-22.	service bind9 restart
-23.	Untuk mengecek apakah konfigurasi sudah benar atau belum, lakukan perintah berikut pada client
+### 4️⃣ Testing Nomor 4
+- Lakukan ping pada subdomain `parikesit.abimanyu.d08.com` dan aliasnya dengan command:
+```
+ping parikesit.abimanyu.d08.com
+```
+Dan
+```
+ping www.parikesit.abimanyu.d08.com
+```
+![image4](./assets/images/NO4B.png)
+
+### ⭕ Nomor 5
+Buat juga reverse domain untuk domain utama. (Abimanyu saja yang direverse)
+
+### 🟢 Jawaban Nomor 5
+### 5️⃣ Membuat Reverse Domain Abimanyu
+
+- Lalu pada `Yudhistira` setting konfigurasi local dengan command:
+```
+nano /etc/bind/named.conf.local
+```
+
+- Tambahkan zone baru untuk reverse DNSnya seperti gambar di bawah:
+```
+zone "2.195.192.in-addr.arpa" {
+        type master;
+        file "/etc/bind/prak1/2.195.192.in-addr.arpa";
+};
+```
+![image5](./assets/images/NO5A.png)
+
+- Lakukan hal yang sama seperti pada nomor 2 dan 3. File `db.local` dari path `/etc/bind` ke dalam folder `prak1` yang baru saja dibuat dan ubah namanya menjadi `2.195.192.in-addr.arpa`. Kemudian edit file dengan command `nano /etc/bind/prak1/2.195.192.in-addr.arpa` menjadi di bawah ini:
+
+![image5](./assets/images/NO5B.png)
+
+- Lalu restart bind9nya dengan command:
+```
+service bind9 restart
+```
+
+### 5️⃣ Testing Nomor 5
+- Untuk mengecek apakah konfigurasi sudah benar atau belum, lakukan perintah berikut pada client:
+```
+host -t PTR 192.195.2.5
+```
 ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/f772b833-06f3-4a6f-a76f-6c24f2295ee7)
 
-24.	Masukan apt-get update dan install dns utils ke /root/.bashscr client, agar otomatis dimulai saat memulai project.
+### ⭕ Nomor 6
+Agar dapat tetap dihubungi ketika DNS Server Yudhistira bermasalah, buat juga Werkudara sebagai DNS Slave untuk domain utama.
 
-### Membuat DNS slave untuk (nomor 6)
-25.	Pertama kita konfigurasi bind dns master, Edit file /etc/bind/named.conf.local dan sesuaikan dengan syntax berikut </br>
-![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/ce8a30d7-333d-413a-92b6-80645349b121) </br>
-Tambahkan pada domain arjuna dan abimanyu
-```
-    notify yes;
-    also-notify { "IP dns slave"; }; // Masukan IP dns slave tanpa tanda petik
-    allow-transfer { "IP dns slave"; }; // Masukan IP dns slave tanpa tanda petik
-```
-Lalu restart bind service bind9 restart
+### 🟢 Jawaban Nomor 6
+### 6️⃣ Membuat Konfigurasi DNS Master Dahulu
 
-### konfigurasi dns slave
-27. Lalu kita konfigurasi dns slave. Lakukan apt-get update dan apt-get install bind9 -y pada dns slave.
-28.	Kemudian buka file /etc/bind/named.conf.local pada Dns slave dan tambahkan syntax berikut
-zone "namadomain.com (arjuna dan abimanyu)" {
-    type slave;
-    masters { "IP DNS master"; }; // Masukan IP DNS master tanpa tanda petik
-    file "/var/lib/bind/jarkom2022.com"; // ganti jadi nama domain
+- Pada `Yudhistira` (DNS Master) setting konfigurasi local dengan command:
+```
+nano /etc/bind/named.conf.local
+```
+- Isi konfigurasi berikut
+```
+zone "arjuna.d08.com" {
+        type master;
+        notify yes;
+        also-notify { 192.195.1.2; };
+        allow-transfer { 192.195.1.2; };
+        file "/etc/bind/prak1/arjuna.d08.com";
 };
-Lalu restart bind service bind9 restart
 
-### Testing
-29.	Testing… matikan server DNS master dengan service bind9 service bind9 stop
-30.	Pada client pastikan /etc/resolv.conf mengarah ke ip dns master dan dns slave dengan
-Nameserver IP DNS master
-Nameserver IP DNS slave
-31.	Lakukan ping dari client </br>
-*note untuk menyalakan lagi dns server lakukan service bind9 restart , 2 server dns bisa berjalan bersamaan </br>
-*note backup konfigurasi dns slave dan master ke root/bind/ seperti cara diatas (termasuk update dan install bind di bash script). </br>
-*note masukan echo nameserver dns master dan slave, Juga masukan apt-get update dan install dns utils ke /root/.bashscr client, agar otomatis dimulai saat memulai project. </br>
+zone "abimanyu.d08.com" {
+        type master;
+        notify yes;
+        also-notify { 192.195.1.2; };
+        allow-transfer { 192.195.1.2; };
+        file "/etc/bind/prak1/abimanyu.d08.com";
+};
+```
+![image6](./assets/images/NO6A.png)
 
-### Membuat subdomain baratayuda di dns slave setelah diarahkan dari dns master (nomor 7 dan nomor 8) 
-32. pertama modifikasikonfigurasi abimanyu.d08.com pada /etc/bind/prak1 di dnsmaster untuk prefix baratayuda diarahkan ke dns slave menjadi </br>
-![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/dc2c0983-94e4-437f-ae35-5747a0a00a37) </br>
+- Lalu restart bind9nya dengan command:
+```
+service bind9 restart
+```
 
-33. jangan lupa untuk modifikasi named.conf.options comment dnssec-validation auto; dan tambahkan allow-query{any;}; // pada dns master dan slave
-34. juga pastikan named.nonf.local domain abimanyu di beri allow transfer ke dns slave lalu restart bind9.
-35. Lalu modifikasi domain baratayuda.abimanyu.d08.com pada dns slave menjadi seperti berikut
-![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/aa2feb3c-5420-4cc9-bf0a-908d16f83ac6)
+### 6️⃣ Konfigurasi DNS Slave
 
-36. Lalu buat direktori mkdir /etc/bind/delegasi dan buat file untuk mengkonfigurasi bind baratayuda dengan cp /etc/bind/db.local ke direktori didalam delegasi.
-37. kemudian edit file baratayuda... menjadi seperti berikut 
-![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/fe918a81-3922-4169-b815-9cfa99ee5dc7)
-38. Lakukan restart bind9 llalu testing dengan ping ke domain domain yang baru dibuat tersebut
+- Pastikan kita sudah melakukan instalasi bind9 di DNS Slavenya `Werkudara`. Apabila belum, gunakan command berikut:
+```
+apt-get update
+apt-get install bind9 -y
+```
+
+- Masuk ke `/etc/bind/` dan edit file `named.conf.local`, lalu masukan konfigurasi berikut:
+```
+zone "arjuna.d08.com" {
+    type slave;
+    masters { 192.195.1.3; };
+    file "/var/lib/bind/arjuna.d08.com";
+};
+
+zone "abimanyu.d08.com" {
+    type slave;
+    masters { 192.195.1.3; };
+    file "/var/lib/bind/abimanyu.d08.com";
+};
+```
+- Lalu restart bind9nya dengan command:
+```
+service bind9 restart
+```
+
+### 6️⃣ Testing Nomor 6
+
+- Matikan server DNS master (Yudhistira) dengan command `service bind9 stop`
+- Pastikan client sudah menginstall `dnsutils` apabila belum, menggunakan command berikut:
+```
+apt-get install dnsutils -y
+```
+- Lalu lakukan `nslookup` dengan command berikut:
+```
+nslookup www.abimanyu.d08.com
+```
+Dan
+```
+nslookup www.arjuna.d08.com
+```
+
+![image6](./assets/images/NO6B.png)
+![image6](./assets/images/NO6C.png)
+
+Dapat dilihat, bahwa saat melakukan `nslookup` ke alias masing-masing domain, server yang menghandle adalah `192.195.1.2` yang mana itu adalah IP dari `Werkudara`
+
+### ⭕ Nomor 7 ➡️ Nomor 8
+Seperti yang kita tahu karena banyak sekali informasi yang harus diterima, buatlah subdomain khusus untuk perang yaitu baratayuda.abimanyu.yyy.com dengan alias www.baratayuda.abimanyu.yyy.com yang didelegasikan dari Yudhistira ke Werkudara dengan IP menuju ke Abimanyu dalam folder Baratayuda.
+
+Untuk informasi yang lebih spesifik mengenai Ranjapan Baratayuda, buatlah subdomain melalui Werkudara dengan akses rjp.baratayuda.abimanyu.yyy.com dengan alias www.rjp.baratayuda.abimanyu.yyy.com yang mengarah ke Abimanyu.
+
+### 🟢 Jawaban Nomor 7 ➡️ Nomor 8
+### 7️⃣&8️⃣ Setting Delegasi Pada DNS Master
+
+- Pertama, modifikasi konfigurasi `abimanyu.d08.com` pada `/etc/bind/prak1` di dnsmaster untuk prefix baratayuda diarahkan ke dns slave menjadi:
+```
+ns1     	IN      A       192.195.1.2     ;IP Werkudara
+baratayuda	IN      NS      ns1
+```
+![image7](./assets/images/NO7A.png)
+
+- Jangan lupa untuk modifikasi `named.conf.options`. Comment `dnssec-validation auto;` dan tambahkan allow-query{any;}; Pada DNS Master dan Slave.
+
+![image7](./assets/images/NO7B.png)
+
+- Pastikan pada file `named.nonf.local` domain `Abimanyu` di beri allow transfer ke DNS Slave.
+
+![image7](./assets/images/NO7C.png)
+
+- Lalu restart bind9nya dengan command:
+```
+service bind9 restart
+```
+### 7️⃣&8️⃣ Setting Delegasi Pada DNS Slave
+
+- Pada `Werkudara` edit file `/etc/bind/named.conf.options`:
+```
+nano /etc/bind/named.conf.options
+```
+Kemudian edit filenya menjadi seperti gambar di bawah:
+
+![image8](./assets/images/NO8B.png)
+
+- Lalu edit file `/etc/bind/named.conf.local` menjadi seperti gambar di bawah:
+
+![image8](./assets/images/NO8C.png)
+
+- Buatlah folder `delegasi` dalam folder `/etc/bind`
+```
+mkdir /etc/bind/delegasi
+```
+- Copy file `/etc/bind/db.local` ke folder `delegasi` yang baru saja dibuat.
+```
+cp /etc/bind/db.local /etc/bind/delegasi/baratayuda.abimanyu.d08.com
+```
+- Modifikasi file `baratayuda.abimanyu.d08.com` menjadi seperti berikut:
+
+![image8](./assets/images/NO8A.png)
+
+- Lalu restart bind9nya dengan command:
+```
+service bind9 restart
+```
+### 7️⃣&8️⃣ Testing Nomor 7 & Nomor 8
+
+- Lakukan nslookup ke kedua domain yang sudah didelegasikan dengan command:
+```
+nslookup baratayuda.abimanyu.d08.com
+nslookup www.baratayuda.abimanyu.d08.com
+```
+👆🏻`baratayuda.abimanyu.d08.com` 👇🏻`rjp.baratayuda.abimanyu.d08.com`
+```
+nslookup rjp.baratayuda.abimanyu.d08.com
+nslookup www.rjp.baratayuda.abimanyu.d08.com
+```
+
+Hasil:
+![image8](./assets/images/NO8D.png)
+![image8](./assets/images/NO8E.png)
 
 ### ⭕ Nomor 9 ➡️ Nomor 10
 Arjuna merupakan suatu Load Balancer Nginx dengan tiga worker (yang juga menggunakan nginx sebagai webserver) yaitu Prabakusuma, Abimanyu, dan Wisanggeni. Lakukan deployment pada masing-masing worker.
