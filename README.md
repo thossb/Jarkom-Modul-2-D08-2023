@@ -837,3 +837,79 @@ service apache2 restart
 ⬆️Pada gambar di atas sudah menggunakan `www.abimanyu.d08.com`
 
 ![Image19](./assets/images/NO19D.png)
+
+### ⭕ Nomor 19
+Karena website www.parikesit.abimanyu.yyy.com semakin banyak pengunjung dan banyak gambar gambar random, maka ubahlah request gambar yang memiliki substring “abimanyu” akan diarahkan menuju abimanyu.png.
+
+### 🟢 Jawaban Nomor 20
+### 2️⃣0️⃣ Setting .htaccess Pada Abimanyu
+
+- Pada folder `/var/www/parikesit.abimanyu.d08/` edit file `.htaccess` yang berisi konfigurasi berikut:
+```
+# Mengalihkan permintaan gambar dengan substring "abimanyu" ke "abimanyu.png"
+RewriteCond %{REQUEST_URI} abimanyu
+RewriteRule .* /var/www/parikesit.abimanyu.d08/public/images/abimanyu.png [L]
+```
+![Image20](./assets/images/NO20A.png)
+
+- Pastikan dalam file `/etc/apache2/sites-available/parikesit.abimanyu.d08.com.conf` sudah ada field berikut:
+
+![Image20](./assets/images/NO20B.png)
+
+- Setelah itu kita restart apache2-nya dengan command:
+```
+service apache2 restart
+```
+
+### 2️⃣0️⃣ Testing Nomor 20
+
+- Pada client, install `exiftool` dengan command berikut:
+```
+apt-get install exiftool -y
+```
+
+- Kemudian kita lakukan download gambar dengan perintah:
+```
+lynx parikesit.abimanyu.d08.com/public/images/abimanyu.png
+```
+
+- Lalu kita akan mendapatkan tampilan berikut:
+	- Tekan `d`
+	![Image20](./assets/images/NO20C.png)
+	- Pilih `Save to disk`
+	![Image20](./assets/images/NO20D.png)
+	- Save namanya dengan `abimanyu.png`
+
+- Setelah itu kita akan melihat isi file `abimanyu.png` dengan command:
+```
+exiftool abimanyu.png
+```
+Kita dapat melihat detail dari file `abimanyu.png`
+
+![Image20](./assets/images/NO20E.png)
+
+- Lalu kita coba mendownload gambar yang memiliki substring `abimanyu` dengan cara yang sama.
+```
+lynx parikesit.abimanyu.d08.com/public/images/not-abimanyu.png
+
+Atau juga bisa
+
+lynx parikesit.abimanyu.d08.com/public/images/abimanyu-student.png
+```
+Dapat dilihat pada gambar di bawah, kita memiliki file hasil download yang saya beri nama `not-abimanyu.png` dan `abimanyu-student.png`
+
+![Image20](./assets/images/NO20F.png)
+
+- Kemudian kita gunakan command exiftool untuk melihat detail kedua file tersebut. Apabila kedua detail filenya sama, maka kita sudah mengarahkan gambar yang memiliki substring `abimanyu` menjadi mendowload `abimanyu.png`
+```
+exiftool not-abimanyu.png
+exiftool abimanyu-student.png
+```
+Hasilnya adalah:
+
+![Image20](./assets/images/NO20G.png)
+![Image20](./assets/images/NO20H.png)
+
+- Dapat kita lihat bahwa detail kedua file tersebut sama dengan `abimanyu.png`
+
+## THANK U! 🙏🏻🫂🙏🏻🫂
