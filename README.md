@@ -1158,25 +1158,24 @@ Begitu juga folder `/var` di backup pada direktori `/root`
 - Abimanyu
 ```sh
 echo nameserver 192.168.122.1 >> /etc/resolv.conf
+#echo nameserver 192.195.1.3 >> /etc/resolv.conf
+#echo nameserver 192.195.1.2 >> /etc/resolv.conf
 
 apt-get update && apt install nginx php php-fpm -y
+apt-get install libapache2-mod-php7.0 wget unzip -y
 service nginx start
-cp -r -f /root/ngd08/nginx /etc/
 service php7.0-fpm start
-rm -rf /etc/nginx/sites-enabled/default
+cp -r -f /root/ngd08/nginx /etc/
+rm -r -f /etc/nginx/sites-enabled/default
 mkdir /var/www/jarkom
-touch /var/www/jarkom/index.php
-echo  "<?php
- echo \"Halo, Kamu berada di ABIMANYU\";
- ?>" > /var/www/jarkom/index.php
+cp -r -f /root/var/var /
 ln -s /etc/nginx/sites-available/jarkom /etc/nginx/sites-enabled
 service nginx restart
 
-apt-get install apache2 wget unzip -y
-apt-get install libapache2-mod-php7.0 -y
+apt-get install apache2 -y
 cp -r -f /root/var/var /
-mkdir /var/www/parikesit.abimanyu.d08/secret
 cp -r -f /root/apache2/apache2 /etc/
+mkdir /var/www/parikesit.abimanyu.d08/secret
 a2ensite abimanyu.d08.com.conf
 a2ensite parikesit.abimanyu.d08.com.conf
 a2ensite rjp.baratayuda.abimanyu.d08.com.conf
@@ -1184,5 +1183,69 @@ a2enmod rewrite
 service apache2 restart
 ```
 
+- Prabukusuma
+```sh
+echo nameserver 192.168.122.1 > /etc/resolv.conf
+
+apt-get update && apt install nginx php php-fpm -y
+service nginx start
+cp -r -f /root/ngd08/nginx /etc/
+service php7.0-fpm start
+rm -rf /etc/nginx/sites-enabled/default
+mkdir /var/www/jarkom
+cp -r -f /root/var/var /
+ln -s /etc/nginx/sites-available/jarkom /etc/nginx/sites-enabled
+service nginx restart
+```
+
+- Wisanggeni
+```sh
+echo nameserver 192.168.122.1 > /etc/resolv.conf
+
+apt-get update && apt install nginx php php-fpm -y
+service nginx start
+cp -r -f /root/ngd08/nginx /etc/
+service php7.0-fpm start
+rm -rf /etc/nginx/sites-enabled/default
+mkdir /var/www/jarkom
+cp -r -f /root/var/var /
+ln -s /etc/nginx/sites-available/jarkom /etc/nginx/sites-enabled
+service nginx restart
+```
+
+- Load Balancer - Arjuna
+```sh
+echo nameserver 192.168.122.1 > /etc/resolv.conf
+
+apt-get install nginx -y
+service nginx start
+cp -r -f /root/ngd08/nginx /etc/
+rm -rf /etc/nginx/sites-enabled/default
+ln -s /etc/nginx/sites-available/lb-arjuna /etc/nginx/sites-enabled
+service nginx restart
+```
+
+### Client
+- Nakula
+```sh
+echo nameserver 192.195.1.3 >> /etc/resolv.conf
+echo nameserver 192.195.1.2 >> /etc/resolv.conf
+
+apt-get update
+apt-get install dnsutils -y
+apt-get install lynx -y
+apt-get install exiftool -y
+```
+
+- Sadewa
+```sh
+echo nameserver 192.195.1.3 >> /etc/resolv.conf
+echo nameserver 192.195.1.2 >> /etc/resolv.conf
+
+apt-get update
+apt-get install dnsutils -y
+apt-get install lynx -y
+apt-get install exiftool -y
+```
 
 ## THANK U! 🙏🏻🫂🙏🏻🫂
