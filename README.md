@@ -36,70 +36,92 @@ yyy pada url adalah kode kelompok anda
 File requirement dapat diakses melalui drive berikut.
 
 ## Langkah - langkah penyelesaian
-### Setup dan nomer (1,2,3)
-1.	Susun topologi dan koneksi
-![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/87381d4c-5abb-48f8-b2be-799ae314beaf)
-
+## IP ADDRESS KELOMPOK D08
+### DNS Server:
+Werkudara (DNS Slave):
 ```
-eth 1
-
 auto eth0
 iface eth0 inet static
 	address 192.195.1.2
 	netmask 255.255.255.0
 	gateway 192.195.1.1
-
+```
+Yudhistira (DNS Master):
+```
 auto eth0
 iface eth0 inet static
 	address 192.195.1.3
 	netmask 255.255.255.0
 	gateway 192.195.1.1
-----------------------------------------
+```
 
-eth 2
-
+### Web Server
+Arjuna (LB):
+```
 auto eth0
 iface eth0 inet static
 	address 192.195.2.2
 	netmask 255.255.255.0
 	gateway 192.195.2.1
-
+```
+Wisanggeni:
+```
 auto eth0
 iface eth0 inet static
 	address 192.195.2.3
 	netmask 255.255.255.0
 	gateway 192.195.2.1
-
+```
+Prabukusuma:
+```
 auto eth0
 iface eth0 inet static
 	address 192.195.2.4
 	netmask 255.255.255.0
 	gateway 192.195.2.1
-
+```
+Abimanyu:
+```
 auto eth0
 iface eth0 inet static
 	address 192.195.2.5
 	netmask 255.255.255.0
 	gateway 192.195.2.1
+```
 
-------------------------------------------
-eth 3
+### Client
+__NOTE: SETIAP CLIENT NAMESERVER PADA FILE "/etc/resolv.conf" MENGARAH KE IP DNS MASTER DAN DNS SLAVE"__
 
+Nakula:
+```
 auto eth0
 iface eth0 inet static
 	address 192.195.3.2
 	netmask 255.255.255.0
 	gateway 192.195.3.1
-
+```
+Sadewa:
+```
 auto eth0
 iface eth0 inet static
 	address 192.195.3.3
 	netmask 255.255.255.0
 	gateway 192.195.3.1
-
-
--------------------------------------------
 ```
+
+### Router
+Pandudewanata:
+```
+eth0: DHCP dari NAT
+eth1: 192.195.1.1 (ke DNS server)
+eth2: 192.195.2.1 (ke Web server)
+eth3: 192.195.3.1 (ke client)
+```
+
+### Setup nomor 1, 2, dan 3
+1.	Susun topologi dan koneksi seperti pada gambar di bawah.
+![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/87381d4c-5abb-48f8-b2be-799ae314beaf)
+
 3.	Set iptable di router (**iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE -s 192.195.0.0/16**), dan taruh di bash script agar tidak hilang
 4.	Echo nameserver di node terluar, untuk connect dengan router agar terconnect dengan internet, dan taro di bashscript agar tidak perlu diulang (**echo nameserver 192.168.122.1 > /etc/resolv.conf**)
 5.	Instalasi bind di dns master
@@ -187,8 +209,230 @@ Nameserver IP DNS slave
 ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/fe918a81-3922-4169-b815-9cfa99ee5dc7)
 38. Lakukan restart bind9 llalu testing dengan ping ke domain domain yang baru dibuat tersebut
 
-### Nomor 9
-### Nomor 10
+### Nomor 9 ➡️ Nomor 10
+Arjuna merupakan suatu Load Balancer Nginx dengan tiga worker (yang juga menggunakan nginx sebagai webserver) yaitu Prabakusuma, Abimanyu, dan Wisanggeni. Lakukan deployment pada masing-masing worker.
+
+Kemudian gunakan algoritma Round Robin untuk Load Balancer pada Arjuna. Gunakan server_name pada soal nomor 1. Untuk melakukan pengecekan akses alamat web tersebut kemudian pastikan worker yang digunakan untuk menangani permintaan akan berganti ganti secara acak. Untuk webserver di masing-masing worker wajib berjalan di port 8001-8003. Contoh
+- Prabakusuma:8001
+- Abimanyu:8002
+- Wisanggeni:8003
+
+### Jawaban  Nomor 9 ➡️ Nomor 10
+### 9️⃣🔟 Setting Worker
+- Langkah pertama yang harus dilakukan adalah dengan melakukan instalasi `nginx` dan keperluan lainnya pada setiap worker dan load balancernya dengan perintah:
+```
+apt-get update && apt install nginx php php-fpm -y
+apt-get install libapache2-mod-php7.0 wget unzip -y
+```
+- Kedua, pada setiap worker dan load balancer masukan perintah
+```
+service nginx start
+```
+- Ketiga, kita masuk pada direktori `/var/www`. Langkah ini dilakukan pada setiap worker saja.
+```
+cd /var/www
+```
+- Keempat, pada folder `/var/www` kita masukan file yang berisi asset pada file yang diberikan. Untuk mendownload assetnya kita akan menggunakan wget yaitu dengan command:
+```
+wget --no-check-certificate 'https://drive.google.com/uc?export=download&id=17tAM_XDKYWDvF-JJix1x7txvTBEax7vX' -O arjuna.d08.zip
+```
+- Kelima, file tersebut akan disimpan pada folder `/var/www`. Kemudian kita akan melakukan unzip dan menghapus file .zip dengan command: <br>
+```
+unzip arjuna.d08.zip && rm arjuna.d08.zip
+```
+__NOTE: JANGAN LUPA UNTUK MENGINSTALL UNZIP__
+- Keenam, kita unzip file `arjuna.d08.zip`, seharusnya kita akan mendapatkan folder bernama `arjuna.yyy.com`. Kita akan merename folder tersebut menjadi `jarkom` dengan command:
+```
+mv arjuna.yyy.com jarkom
+```
+
+- di dalam folder `jarkom` yang telah kita buat akan berisi sebuah file `index.php` yang berisi:
+```
+<?php
+$hostname = gethostname();
+$date = date('Y-m-d H:i:s');
+$php_version = phpversion();
+$username = get_current_user();
+
+echo "Hello World!<br>";
+echo "Saya adalah: $username<br>";
+echo "Saat ini berada di: $hostname<br>";
+echo "Versi PHP yang saya gunakan: $php_version<br>";
+echo "Tanggal saat ini: $date<br>";
+?>
+```
+__⬆️File tersebut akan memberitahukan kita berada di server mana.__ <br>
+
+- Ketujuh, kita akan masuk ke direktori `/etc/nginx/sites-available` dengan command:
+```
+cd /etc/nginx/sites-available
+```
+
+- Kedelapan, kita akan membuat file baru yang bernama `jarkom` dengan command:
+```
+nano jarkom
+```
+
+- Kesembilan, kita akan memasukan konfigurasi berikut ke dalam file `jarkom`:
+
+👉🏻 Pada Prabukusuma:
+```
+ server {
+
+ 	listen 8001;
+
+ 	root /var/www/jarkom;
+
+ 	index index.php index.html index.htm;
+ 	server_name _;
+
+ 	location / {
+ 			try_files $uri $uri/ /index.php?$query_string;
+ 	}
+
+ 	# pass PHP scripts to FastCGI server
+ 	location ~ \.php$ {
+ 	include snippets/fastcgi-php.conf;
+ 	fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
+ 	}
+
+ location ~ /\.ht {
+ 			deny all;
+ 	}
+
+ 	error_log /var/log/nginx/jarkom_error.log;
+ 	access_log /var/log/nginx/jarkom_access.log;
+ }
+```
+👉🏻 Pada Abimanyu:
+```
+ server {
+
+ 	listen 8002;
+
+ 	root /var/www/jarkom;
+
+ 	index index.php index.html index.htm;
+ 	server_name _;
+
+ 	location / {
+ 			try_files $uri $uri/ /index.php?$query_string;
+ 	}
+
+ 	# pass PHP scripts to FastCGI server
+ 	location ~ \.php$ {
+ 	include snippets/fastcgi-php.conf;
+ 	fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
+ 	}
+
+ location ~ /\.ht {
+ 			deny all;
+ 	}
+
+ 	error_log /var/log/nginx/jarkom_error.log;
+ 	access_log /var/log/nginx/jarkom_access.log;
+ }
+```
+👉🏻 Pada Wisanggeni:
+```
+ server {
+
+ 	listen 8003;
+
+ 	root /var/www/jarkom;
+
+ 	index index.php index.html index.htm;
+ 	server_name _;
+
+ 	location / {
+ 			try_files $uri $uri/ /index.php?$query_string;
+ 	}
+
+ 	# pass PHP scripts to FastCGI server
+ 	location ~ \.php$ {
+ 	include snippets/fastcgi-php.conf;
+ 	fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
+ 	}
+
+ location ~ /\.ht {
+ 			deny all;
+ 	}
+
+ 	error_log /var/log/nginx/jarkom_error.log;
+ 	access_log /var/log/nginx/jarkom_access.log;
+ }
+```
+
+ - Kesepuluh, kita akan menyimpan file tersebut dan akan membuat `symlink` dengan command:
+ ```
+ln -s /etc/nginx/sites-available/jarkom /etc/nginx/sites-enabled
+ ```
+
+ - Kesebelas, kita melakukan reload pada service `nginx` dengan command:
+ ```
+ service nginx restart
+ ```
+#### Penting!!!
+```
+📝📝 Perlu dicatat bahwa langkah ketiga hingga kesebelas dilakukan pada tiap worker yaitu Abimanyu, Prabukusuma, dan Wisanggeni. 📝📝
+```
+
+### 9️⃣🔟 Setting Load Balancer
+- Untuk melakukan setting pada load balancer, kita buka terminal pada load balancer kita yaitu `arjuna`.
+- Pertama, kita akan masuk ke direktori `/etc/nginx/sites-available` dengan command:
+```
+cd /etc/nginx/sites-available
+```
+
+- Kedua, kita akan membuat file baru yang bernama `lb-arjuna` dengan command:
+```
+nano lb-arjuna
+```
+
+- Ketiga, kita akan memasukan konfigurasi berikut ke dalam file `lb-arjuna`:
+
+👉🏻 Pada lb-arjuna:
+```
+ # Default menggunakan Round Robin
+ upstream myweb {
+ 	server 192.195.2.4:8001; #Prabukusuma
+	server 192.195.2.5:8002; #Abimanyu
+	server 192.195.2.3:8003; #Wisanggeni
+ }
+ server {
+ 	listen 80;
+ 	server_name arjuna.d08.com;
+
+ 	location / {
+ 	proxy_pass http://myweb;
+ 	}
+ }
+```
+- Keempat, simpan file tersebut dan buat `symlink` dengan command:
+```
+ln -s /etc/nginx/sites-available/lb-arjuna /etc/nginx/sites-enabled
+```
+ - Kelima, kita melakukan reload pada service `nginx` dengan command:
+ ```
+ service nginx restart
+ ```
+
+### 9️⃣🔟 Testing
+- Buka console salah satu client.
+- Pastikan setiap client telah terinstall `lynx`. Apabila belum terinstall, gunakan command:
+```
+apt-get install lynx -y
+```
+- Kemudian masukan command:
+```
+lynx arjuna.d08.com
+```
+- Setelah menjalankan command tersebut, seharusnya kita akan mendapat tampilan web seperti di bawah ini.
+![image9a](./assets/images/NO9A.png)
+![image9b](./assets/images/NO9B.png)
+![image9c](./assets/images/NO9C.png)
+__⬆️Setiap kali kita melakukan lynx ke domain arjuna, maka load balancer akan menunjuk salah satu worker untuk menampilkan webnya.__ <br>
+
 ### Nomor 11
 konfigurasi apache server untuk abimanyu
 ```
