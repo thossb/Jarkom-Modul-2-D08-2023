@@ -708,13 +708,103 @@ __Folder /xixixixi tidak ada, maka errornya adalah 404 Not Found__
 
 ![Image15](./assets/images/NO15E.png)
 
+### ⭕ Nomor 16
+Buatlah suatu konfigurasi virtual host agar file asset www.parikesit.abimanyu.yyy.com/public/js menjadi www.parikesit.abimanyu.yyy.com/js 
 
-### Nomor 15
-### Nomor 16
-### Nomor 17
-### Nomor 18
-### Nomor 19
-### Nomor 20
+### 🟢 Jawaban Nomor 16
+### 1️⃣6️⃣ Setting Apache2 Pada Abimanyu
+
+- Pada file `/etc/apache2/sites-available/parikesit.abimanyu.d08.com.conf` tambahkan konfigurasi berikut:
+```
+Alias "/js" "/var/www/parikesit.abimanyu.d08/public/js"
+```
+![Image16](./assets/images/NO16A.png)
+
+- Setelah itu kita restart apache2-nya dengan command:
+```
+service apache2 restart
+```
+
+### 1️⃣6️⃣ Testing Nomor 16
+
+- `lynx www.parikesit.abimanyu.d08.com/js`
+
+![Image16](./assets/images/NO16B.png)
+
+### ⭕ Nomor 17 ➡️ Nomor 18
+Agar aman, buatlah konfigurasi agar www.rjp.baratayuda.abimanyu.yyy.com hanya dapat diakses melalui port 14000 dan 14400.
+
+Untuk mengaksesnya buatlah autentikasi username berupa “Wayang” dan password “baratayudayyy” dengan yyy merupakan kode kelompok. Letakkan DocumentRoot pada /var/www/rjp.baratayuda.abimanyu.yyy.
+
+### 🟢 Jawaban Nomor 17 ➡️ Nomor 18
+### 1️⃣7️⃣&1️⃣8️⃣Setting Apache2, .htaccess, .htpasswd Pada Abimanyu
+
+- Untuk nomor 17, kita perlu melakukan deployment yang sama seperti pada nomor 11, dan 13. Disini, kita asumsikan kita sudah melakukan setting pada folder `/etc/apache2/sites-available` dan melakukan `a2ensite rjp.baratayuda.abimanyu.d08.com.conf` serta melakukan download asset pada folder `/var/www` yang kemudian foldernya diberi nama `rjp.baratayuda.abimanyu.d08`
+
+- Berikut adalah isi file `rjp.baratayuda.abimanyu.d08.com.conf` pada folder `/etc/apache2/sites-available`:
+```
+<VirtualHost *:14000 *:14400>
+
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/rjp.baratayuda.abimanyu.d08
+        ServerName rjp.baratayuda.abimanyu.d08.com
+        ServerAlias www.rjp.baratayuda.abimanyu.d08.com
+
+		<Directory /var/www/rjp.baratayuda.abimanyu.d08>
+                Options +FollowSymLinks -Multiviews
+                AllowOverride All
+                AuthType Basic
+                AuthName "Restricted Content"
+                AuthUserFile /var/www/rjp.baratayuda.abimanyu.d08/.htpasswd
+                Require valid-user
+        </Directory>
+
+		ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+__Berikut isi file rjp.baratayuda.abimanyu.d08.com.conf:__
+
+![Image17](./assets/images/NO17A.png)
+![Image17](./assets/images/NO17B.png)
+![Image17](./assets/images/NO17C.png)
+
+- Lalu, kita akan masuk ke direktori `/var/www/rjp.baratayuda.abimanyu.d08` yang di sana kita akan membuat file `.htaccess` dan `.htpasswd`. Berikut adalah isinya:
+
+- `.htaccess`
+```
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([^\.]+)$ $1.php [NC,L]
+```
+
+- Dan untuk membuat file `.htpasswd`, dapat melalui langkah berikut:
+	- gunakan command `htpasswd -c /var/www/rjp.baratayuda.abimanyu.d08 Wayang`
+	- Setelah itu kita akan diminta untuk memasukan passwordnya. Ketikan passwordnya dan isi `baratayudad08`.
+- `.htpasswd`
+```
+Wayang:$apr1$aejmbDtH$QByjsGPIg4FzPWKmJS4VE0
+```
+
+- Setelah itu kita restart apache2-nya dengan command:
+```
+service apache2 restart
+```
+
+### 1️⃣7️⃣&1️⃣8️⃣ Testing Nomor 17 ➡️ Nomor 18
+
+- `lynx www.rjp.baratayuda.abimanyu.d08.com:14000` tanpa menggunakan auth Wayang.
+
+__NOTE: HANYA ALERT__
+
+![Image18](./assets/images/NO18A.png)
+
+__DAPAT DILIHAT BAHWA MUNCUL "RESTRICTED CONTENT"__
+![Image18](./assets/images/NO18B.png)
+
+- `lynx -auth=Wayang:baratayudad08 www.rjp.baratayuda.abimanyu.d08.com:14000` menggunakan auth Wayang.
+
+![Image18](./assets/images/NO18C.png)
 
 
 
