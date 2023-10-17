@@ -209,7 +209,7 @@ Nameserver IP DNS slave
 ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/fe918a81-3922-4169-b815-9cfa99ee5dc7)
 38. Lakukan restart bind9 llalu testing dengan ping ke domain domain yang baru dibuat tersebut
 
-### Nomor 9 ➡️ Nomor 10
+### ⭕ Nomor 9 ➡️ Nomor 10
 Arjuna merupakan suatu Load Balancer Nginx dengan tiga worker (yang juga menggunakan nginx sebagai webserver) yaitu Prabakusuma, Abimanyu, dan Wisanggeni. Lakukan deployment pada masing-masing worker.
 
 Kemudian gunakan algoritma Round Robin untuk Load Balancer pada Arjuna. Gunakan server_name pada soal nomor 1. Untuk melakukan pengecekan akses alamat web tersebut kemudian pastikan worker yang digunakan untuk menangani permintaan akan berganti ganti secara acak. Untuk webserver di masing-masing worker wajib berjalan di port 8001-8003. Contoh
@@ -217,8 +217,8 @@ Kemudian gunakan algoritma Round Robin untuk Load Balancer pada Arjuna. Gunakan 
 - Abimanyu:8002
 - Wisanggeni:8003
 
-### Jawaban Nomor 9 ➡️ Nomor 10
-### 9️⃣🔟 Setting Worker
+### 🟢 Jawaban Nomor 9 ➡️ Nomor 10
+### 9️⃣&🔟 Setting Worker
 - Langkah pertama yang harus dilakukan adalah dengan melakukan instalasi `nginx` dan keperluan lainnya pada setiap worker dan load balancernya dengan perintah:
 ```
 apt-get update && apt install nginx php php-fpm -y
@@ -377,7 +377,7 @@ ln -s /etc/nginx/sites-available/jarkom /etc/nginx/sites-enabled
 📝📝 Perlu dicatat bahwa langkah ketiga hingga kesebelas dilakukan pada tiap worker yaitu Abimanyu, Prabukusuma, dan Wisanggeni. 📝📝
 ```
 
-### 9️⃣🔟 Setting Load Balancer
+### 9️⃣&🔟 Setting Load Balancer
 - Untuk melakukan setting pada load balancer, kita buka terminal pada load balancer kita yaitu `arjuna`.
 - Pertama, kita akan masuk ke direktori `/etc/nginx/sites-available` dengan command:
 ```
@@ -417,7 +417,7 @@ ln -s /etc/nginx/sites-available/lb-arjuna /etc/nginx/sites-enabled
  service nginx restart
  ```
 
-### 9️⃣🔟 Testing
+### 9️⃣&🔟 Testing Nomor 9 & 10
 - Buka console salah satu client.
 - Pastikan setiap client telah terinstall `lynx`. Apabila belum terinstall, gunakan command:
 ```
@@ -428,15 +428,16 @@ apt-get install lynx -y
 lynx arjuna.d08.com
 ```
 - Setelah menjalankan command tersebut, seharusnya kita akan mendapat tampilan web seperti di bawah ini.
+
 ![image9a](./assets/images/NO9A.png)
 ![image9b](./assets/images/NO9B.png)
 ![image9c](./assets/images/NO9C.png)
 __⬆️Setiap kali kita melakukan lynx ke domain arjuna, maka load balancer akan menunjuk salah satu worker untuk menampilkan webnya.__ <br>
 
-### Nomor 11
+### ⭕ Nomor 11
 Selain menggunakan Nginx, lakukan konfigurasi Apache Web Server pada worker Abimanyu dengan web server www.abimanyu.yyy.com. Pertama dibutuhkan web server dengan DocumentRoot pada /var/www/abimanyu.yyy
 
-### Jawaban Nomor 11
+### 🟢 Jawaban Nomor 11
 ### 1️⃣1️⃣ Setting Apache2 Pada Abimanyu
 
 - Pada server `Abimanyu` lakukan instalasi berikut untuk memenuhi persyaratan.
@@ -513,7 +514,7 @@ rm -r abimanyu.d08.com.zip
 service apache2 restart
 ```
 
-### 1️⃣1️⃣ Testing No. 11
+### 1️⃣1️⃣ Testing Nomor 11
 - Buka client dan lakukan `lynx` pada `abimanyu.d08.com`:
 ```
 lynx abimanyu.d08.com
@@ -523,32 +524,189 @@ atau
 lynx www.abimanyu.d08.com
 ```
 - Hasilnya akan menampilkan page di bawah:
+
 ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/1056702f-b2cb-4509-874d-3a65eafa2c82)
 
-### Nomor 12
-konfigurasi /etc/apache2 menjadi seperti berikut</br>
+### ⭕ Nomor 12
+Setelah itu ubahlah agar url www.abimanyu.yyy.com/index.php/home menjadi www.abimanyu.yyy.com/home.
+
+### 🟢 Jawaban Nomor 12
+### 1️⃣2️⃣ Setting Apache2 Pada Abimanyu
+
+- Tambahkan konfigurasi pada file `/etc/apache2/sites-available/abimanyu.d08.com.conf` menjadi seperti berikut:
+```
+Alias "/home" "/var/www/abimanyu.d08/index.php/home"
+```
+Atau seperti gambar di bawah:
 ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/e92c8e15-d222-45f5-9f1e-f35fc31509b9)
-</br>
-hasilnya lynx www.abimanyu.d08.com/home di client</br>
+
+### 1️⃣2️⃣ Testing Nomor 12
+- Hasil `lynx www.abimanyu.d08.com/home` pada client:
+
 ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/7b551372-6f01-48a6-b3f1-e7b3a53587f4)
-</br>
 
-### Nomor 13
-lakukan hal yang sama dengan nomer 11, tetapi sekarang untuk parikesit abimanyu.. isinya di dapat dari wget ke drive yang sudah tertera.
-hasilnya jika kita lynx www.parikesit.abimanyu.d08.com di client akan menghasilkan</br>
+
+### ⭕ Nomor 13
+Selain itu, pada subdomain www.parikesit.abimanyu.yyy.com, DocumentRoot disimpan pada /var/www/parikesit.abimanyu.yyy
+
+### 🟢 Jawaban Nomor 13
+### 1️⃣3️⃣ Setting Apache2 Pada Abimanyu
+- Langkahnya sangat mirip dengan nomor 11.
+- Pertama, kita masuk ke direktori `/etc/apache2/sites-available` dengan command:
+```
+cd /etc/apache2/sites-available
+```
+
+- Setelah itu kita akan mencopy file `abimanyu.d08.com.conf` dengan command:
+```
+cp abimanyu.d08.com.conf parikesit.abimanyu.d08.com.conf
+```
+
+- Di dalam file `parikesit.abimanyu.d08.com.conf` kita tambahkan beberapa konfigurasi sehingga konfigurasinya menjadi:
+```
+<VirtualHost *:80>
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/parikesit.abimanyu.d08
+        ServerName parikesit.abimanyu.d08.com
+        ServerAlias www.parikesit.abimanyu.d08.com
+		
+		ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+- Kita hanya menambahkan `ServerName` dan `ServerAlias` serta mengubah DocumentRoot-nya menjadi `/var/www/parikesit.abimanyu.d08`
+
+- Lalu kita akan mengenable konfigurasi file `parikesit.abimanyu.d08.com.conf` dengan command:
+```
+a2ensite parikesit.abimanyu.d08.com.conf
+```
+
+- Kemudian kita akan pergi ke direktori `var/www` dengan command:
+```
+cd /var/www
+```
+
+- Pada direktori tersebut, kita akan mendownload file yang berisi konten `parikesit.abimanyu.d08.com` dengan wget, berikut adalah commandnya:
+```
+wget --no-check-certificate 'https://drive.google.com/uc?export=download&id=1LdbYntiYVF_NVNgJis1GLCLPEGyIOreS' -O parikesit.abimanyu.d08.com.zip
+```
+
+- Setelah itu unzip file yang telah kita download dengan command:
+```
+unzip parikesit.abimanyu.d08.com.zip
+```
+
+- Kemudian kita akan merename folder yang telah di-unzip menjadi `parikesit.abimanyu.d08` dengan command:
+```
+mv parikesit.abimanyu.yyy.com parikesit.abimanyu.d08
+```
+
+- Dan hapus file hasil download zipnya dengan command:
+```
+rm -r parikesit.abimanyu.d08.com.zip
+```
+
+- Setelah itu kita restart apache2-nya dengan command:
+```
+service apache2 restart
+```
+
+### 1️⃣3️⃣ Testing Nomor 13
+- Hasil `lynx www.parikesit.abimanyu.d08.com` pada client:
+
 ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/21dc6265-e64e-42f3-8a14-554ae3df824b)
-</br>
-akan muncul tampilan diatas, dimana kita bisa melihat directory listing sesuai isinya.
 
-### Nomor 14
-Untuk nomor 14, konfigurasi parikesit.abimanyu seperti berikut</br>
+Akan muncul tampilan diatas, dimana kita bisa melihat directory listing sesuai isinya.
+
+### ⭕ Nomor 14
+Pada subdomain tersebut folder /public hanya dapat melakukan directory listing sedangkan pada folder /secret tidak dapat diakses (403 Forbidden).
+
+### 🟢 Jawaban Nomor 14
+### 1️⃣4️⃣ Setting Apache2 Pada Abimanyu
+
+- Untuk nomor 14, tambahkan konfigurasi pada file `/etc/apache2/sites-available/parikesit.abimanyu.d08.com.conf` seperti berikut:
+```
+<Directory /var/www/parikesit.abimanyu.d08/public>
+	Options +Indexes
+</Directory>
+
+<Directory /var/www/parikesit.abimanyu.d08/secret>
+    Options -Indexes
+</Directory>
+```
 ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/15b9d06d-b367-44d2-8560-9eb16f028040)
-</br>
-code tersebut memberi perintah agar folder secret tidak dapat diakses (403 forbidden).
-hasilnya jika kita coba buka adalah sebagai berikut</br>
+
+- Code tersebut memberi perintah agar folder secret tidak dapat diakses (403 forbidden).
+
+- Setelah itu kita restart apache2-nya dengan command:
+```
+service apache2 restart
+```
+
+### 1️⃣4️⃣ Testing Nomor 14
+
+- `lynx www.parikesit.abimanyu.d08.com/public`
+
 ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/3a73a105-4652-4b5f-a2c9-270aeb3fc948)
+
+- `lynx www.parikesit.abimanyu.d08.com/secret` 
+
 ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/b02b2055-0e89-4a22-8b49-e28d814deda2)
 
+### ⭕ Nomor 15
+Buatlah kustomisasi halaman error pada folder /error untuk mengganti error kode pada Apache. Error kode yang perlu diganti adalah 404 Not Found dan 403 Forbidden.
+
+### 🟢 Jawaban Nomor 15
+### 1️⃣5️⃣ Setting .htaccess pada Abimanyu
+
+- Pertama, kita jalankan perintah berikut untuk mengaktifkan module rewrite:
+```
+a2enmod rewrite
+```
+
+- Kemudian kita perlu membuat sebuah file `.htaccess` pada direktori `/var/www/parikesit.abimanyu.d08` dengan command:
+```
+nano /var/www/parikesit.abimanyu.d08/.htaccess
+```
+
+- Lalu kita isikan file `.htaccess`nya dengan kode berikut:
+```
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([^\.]+)$ $1.php [NC,L]
+ErrorDocument 404 /error/404.html
+ErrorDocument 403 /error/403.html
+```
+
+![Image15](./assets/images/NO15C.png)
+
+- Pada file `/etc/apache2/sites-available/parikesit.abimanyu.d08.com.conf` tambahkan konfigurasi berikut:
+```
+<Directory /var/www/parikesit.abimanyu.d08>
+    Options +FollowSymLinks -Multiviews
+    AllowOverride All
+</Directory>
+```
+![Image15](./assets/images/NO15B.png)
+
+- Setelah itu kita restart apache2-nya dengan command:
+```
+service apache2 restart
+```
+
+### 1️⃣5️⃣ Testing Nomor 15
+
+- `lynx www.parikesit.abimanyu.d08.com/secret`
+
+__Folder /secret sudah diatur agar tidak dapat menampilkan direktori listing (403 Forbidden)__
+
+![Image15](./assets/images/NO15D.png)
+
+- `lynx www.parikesit.abimanyu.d08.com/xixixixi`
+
+__Folder /xixixixi tidak ada, maka errornya adalah 404 Not Found__
+
+![Image15](./assets/images/NO15E.png)
 
 
 ### Nomor 15
