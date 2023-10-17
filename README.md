@@ -428,10 +428,10 @@ apt-get install lynx -y
 lynx arjuna.d08.com
 ```
 - Setelah menjalankan command tersebut, seharusnya kita akan mendapat tampilan web seperti di bawah ini.
-
 ![image9a](./assets/images/NO9A.png)
 ![image9b](./assets/images/NO9B.png)
 ![image9c](./assets/images/NO9C.png)
+
 __⬆️Setiap kali kita melakukan lynx ke domain arjuna, maka load balancer akan menunjuk salah satu worker untuk menampilkan webnya.__ <br>
 
 ### ⭕ Nomor 11
@@ -524,7 +524,6 @@ atau
 lynx www.abimanyu.d08.com
 ```
 - Hasilnya akan menampilkan page di bawah:
-
 ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/1056702f-b2cb-4509-874d-3a65eafa2c82)
 
 ### ⭕ Nomor 12
@@ -537,12 +536,11 @@ Setelah itu ubahlah agar url www.abimanyu.yyy.com/index.php/home menjadi www.abi
 ```
 Alias "/home" "/var/www/abimanyu.d08/index.php/home"
 ```
-Atau seperti gambar di bawah:
+Atau seperti gambar di bawah: <br>
 ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/e92c8e15-d222-45f5-9f1e-f35fc31509b9)
 
 ### 1️⃣2️⃣ Testing Nomor 12
 - Hasil `lynx www.abimanyu.d08.com/home` pada client:
-
 ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/7b551372-6f01-48a6-b3f1-e7b3a53587f4)
 
 
@@ -613,7 +611,6 @@ service apache2 restart
 
 ### 1️⃣3️⃣ Testing Nomor 13
 - Hasil `lynx www.parikesit.abimanyu.d08.com` pada client:
-
 ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/21dc6265-e64e-42f3-8a14-554ae3df824b)
 
 Akan muncul tampilan diatas, dimana kita bisa melihat directory listing sesuai isinya.
@@ -646,11 +643,9 @@ service apache2 restart
 ### 1️⃣4️⃣ Testing Nomor 14
 
 - `lynx www.parikesit.abimanyu.d08.com/public`
-
 ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/3a73a105-4652-4b5f-a2c9-270aeb3fc948)
 
 - `lynx www.parikesit.abimanyu.d08.com/secret` 
-
 ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/b02b2055-0e89-4a22-8b49-e28d814deda2)
 
 ### ⭕ Nomor 15
@@ -677,7 +672,6 @@ RewriteRule ^([^\.]+)$ $1.php [NC,L]
 ErrorDocument 404 /error/404.html
 ErrorDocument 403 /error/403.html
 ```
-
 ![Image15](./assets/images/NO15C.png)
 
 - Pada file `/etc/apache2/sites-available/parikesit.abimanyu.d08.com.conf` tambahkan konfigurasi berikut:
@@ -728,7 +722,6 @@ service apache2 restart
 ### 1️⃣6️⃣ Testing Nomor 16
 
 - `lynx www.parikesit.abimanyu.d08.com/js`
-
 ![Image16](./assets/images/NO16B.png)
 
 ### ⭕ Nomor 17 ➡️ Nomor 18
