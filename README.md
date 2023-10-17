@@ -217,7 +217,7 @@ Kemudian gunakan algoritma Round Robin untuk Load Balancer pada Arjuna. Gunakan 
 - Abimanyu:8002
 - Wisanggeni:8003
 
-### Jawaban  Nomor 9 ➡️ Nomor 10
+### Jawaban Nomor 9 ➡️ Nomor 10
 ### 9️⃣🔟 Setting Worker
 - Langkah pertama yang harus dilakukan adalah dengan melakukan instalasi `nginx` dan keperluan lainnya pada setiap worker dan load balancernya dengan perintah:
 ```
@@ -434,54 +434,95 @@ lynx arjuna.d08.com
 __⬆️Setiap kali kita melakukan lynx ke domain arjuna, maka load balancer akan menunjuk salah satu worker untuk menampilkan webnya.__ <br>
 
 ### Nomor 11
-konfigurasi apache server untuk abimanyu
+Selain menggunakan Nginx, lakukan konfigurasi Apache Web Server pada worker Abimanyu dengan web server www.abimanyu.yyy.com. Pertama dibutuhkan web server dengan DocumentRoot pada /var/www/abimanyu.yyy
+
+### Jawaban Nomor 11
+### 1️⃣1️⃣ Setting Apache2 Pada Abimanyu
+
+- Pada server `Abimanyu` lakukan instalasi berikut untuk memenuhi persyaratan.
 ```
-answer :
 apt-get install apache2 wget unzip -y
 apt-get install libapache2-mod-php7.0 -y
+```
 
+- Setelah melakukan instalasi, kita masuk ke direktori `/etc/apache2/sites-available` dengan command:
+```
 cd /etc/apache2/sites-available
-cp 000-default.conf abimanyu.d08.com.conf
+```
 
-----
- tambahin
+- Setelah itu kita akan mencopy file `000-default.conf` dengan command:
+```
+cp 000-default.conf abimanyu.d08.com.conf
+```
+
+- Di dalam file `abimanyu.d08.com.conf` kita tambahkan beberapa konfigurasi sehingga konfigurasinya menjadi:
+```
+<VirtualHost *:80>
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/abimanyu.d08
+        ServerName abimanyu.d08.com
+        ServerAlias www.abimanyu.d08.com
+		
+		ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+- Kita hanya menambahkan `ServerName` dan `ServerAlias` serta mengubah DocumentRoot-nya menjadi `/var/www/abimanyu.d08`
+```
  ServerName abimanyu.d08.com
  ServerAlias www.abimanyu.d08.com
-----
-
-rm -r 000-default.conf
-a2ensite abimanyu.d08.com.conf
-
-cd /var/www/
-wget --no-check-certificate "https://drive.google.com/uc?export=download&id=1a4V23hwK9S7hQEDEcv9FL14UkkrHc-Zc" -O abimanyu.d08.com.zip
-unzip abimanyu.d08.com.zip
-mv abimanyu.yyy.com abimanyu.d08
-rm -r abimanyu.d08.com.zip
-service apache2 restart
-
 ```
-Menginstal Apache dan Modul PHP:
 
-apt-get install apache2 wget unzip -y: Ini adalah perintah untuk menginstal Apache2, wget, dan unzip dengan opsi "-y" untuk mengonfirmasi pemasangan tanpa interaksi pengguna.
-apt-get install libapache2-mod-php7.0 -y: Ini menginstal modul PHP versi 7.0 yang diperlukan untuk menjalankan skrip PHP di server.
-Membuat Konfigurasi Situs Baru:
-cd /etc/apache2/sites-available: Anda berpindah ke direktori konfigurasi situs Apache.
-cp 000-default.conf abimanyu.d08.com.conf: Anda membuat salinan file konfigurasi default dengan nama domain baru "abimanyu.d08.com.conf".
-Mengedit Konfigurasi Situs:
-Anda menambahkan informasi ServerName dan ServerAlias ke dalam file konfigurasi situs baru "abimanyu.d08.com.conf" untuk menentukan nama domain dan alias yang akan digunakan oleh situs.
-Menghapus Konfigurasi Situs Default:
-rm -r 000-default.conf: Anda menghapus konfigurasi situs default yang tidak diperlukan lagi.
-Mengaktifkan Konfigurasi Situs Baru:
-a2ensite abimanyu.d08.com.conf: Anda mengaktifkan konfigurasi situs baru dengan perintah ini.
-Mengunduh dan Menginstal Konten Situs Web:
-cd /var/www/: Anda berpindah ke direktori root web server.
-wget --no-check-certificate "https://drive.google.com/uc?export=download&id=1a4V23hwK9S7hQEDEcv9FL14UkkrHc-Zc" -O abimanyu.d08.com.zip: Anda mengunduh file ZIP yang berisi konten situs web.
-unzip abimanyu.d08.com.zip: Anda mengekstrak isi ZIP.
-mv abimanyu.yyy.com abimanyu.d08: Anda mengubah nama direktori yang telah diekstrak menjadi "abimanyu.d08" (sepertinya ini adalah kesalahan ketik, seharusnya "abimanyu.d08.com" sesuai dengan nama domain).
-Menghapus File ZIP:
-rm -r abimanyu.d08.com.zip: Anda menghapus file ZIP yang telah diekstrak sebelumnya.
-Merestart Apache:
-service apache2 restart: Anda merestart layanan Apache untuk menerapkan konfigurasi baru. hasilnya jika di lynx akan menghasilkan
+- Setelah itu kita akan menghapus file `000-default.conf` yang telah dienable dengan command:
+```
+rm /etc/apache2/sites-enabled/000-default.conf
+```
+
+- Lalu kita akan mengenable konfigurasi file `abimanyu.d08.com.conf` dengan command:
+```
+a2ensite abimanyu.d08.com.conf
+```
+
+- Kemudian kita akan pergi ke direktori `var/www` dengan command:
+```
+cd /var/www
+```
+
+- Pada direktori tersebut, kita akan mendownload file yang berisi konten `abimanyu.d08.com` dengan wget, berikut adalah commandnya:
+```
+wget --no-check-certificate "https://drive.google.com/uc?export=download&id=1a4V23hwK9S7hQEDEcv9FL14UkkrHc-Zc" -O abimanyu.d08.com.zip
+```
+
+- Setelah itu unzip file yang telah kita download dengan command:
+```
+unzip abimanyu.d08.com.zip
+```
+
+- Kemudian kita akan merename folder yang telah di-unzip menjadi `abimanyu.d08` dengan command:
+```
+mv abimanyu.yyy.com abimanyu.d08
+```
+
+- Dan hapus file hasil download zipnya dengan command:
+```
+rm -r abimanyu.d08.com.zip
+```
+
+- Setelah itu kita restart apache2-nya dengan command:
+```
+service apache2 restart
+```
+
+### 1️⃣1️⃣ Testing No. 11
+- Buka client dan lakukan `lynx` pada `abimanyu.d08.com`:
+```
+lynx abimanyu.d08.com
+```
+atau
+```
+lynx www.abimanyu.d08.com
+```
+- Hasilnya akan menampilkan page di bawah:
 ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/1056702f-b2cb-4509-874d-3a65eafa2c82)
 
 ### Nomor 12
