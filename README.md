@@ -38,7 +38,8 @@ File requirement dapat diakses melalui drive berikut.
 ## Langkah - langkah penyelesaian
 ### Setup dan nomer (1,2,3)
 1.	Susun topologi dan koneksi
-![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/15934f35-f4cd-4149-9285-3bd004a9f58d)
+![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/87381d4c-5abb-48f8-b2be-799ae314beaf)
+
 ```
 eth 1
 
@@ -106,20 +107,21 @@ iface eth0 inet static
 7.	Buat directory untuk menyimpan konfigurasi domain yaitu prak1
 8.	Copy db.local pada path /etc/bind ke dalam folder prak1 yang baru saja dibuat dan ubah namanya menjadi arjuna.d08.com dan abimanyu.d08.com
 9.	Kemudian konfigurasi arjuna.d08.com dan abimanyu.d08.com
-![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/a4956d84-253c-42d5-a71e-5ae268c25e42)
-![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/928bffe2-9309-4d95-a0bf-267988dfc54e)
+![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/d3e426a5-0437-441d-93d9-7a656f61d8f3)
+![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/2689aab4-6abe-4bc1-a339-50fdc7b2655b)
 
 10.	Restart bind9 dengan perintah service bind9 restart
 11.	Arahkan client nakula dan sadewa dengan nano /etc/resolv.conf dan tulis nameserver ip dns master kita, untuk mencoba ping arjuna dan abimanyu
 
 ### Lakukan DNS forwarding, agar bisa akses internet
 11.	edit file /etc/bind/named.conf.options pada server dns master
-	 ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/0402704f-1553-4bfd-a599-3390133b15bb)
+![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/7ed74e10-421f-4d05-b126-6f9fec1ca860)
 12.	service bind9 restart dan coba ping google.com
 
 ### Menyiapkan backup pada .bashrc
 13.	Tulis code berikut pada /root/.bashrc (lakukan pada dns server)
-![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/d6894d53-34c2-4a82-83c3-0fa4d970a5f0)
+![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/ded58241-08c3-4c99-9c31-e443e2a02e05)
+
 14.	Lalu kita mkdir /root/prak1/bind lalu lakukan cp -r -f /etc/bind /root/prak1 setiap memodifikasi file bind untuk menyimpan /etc/bind, sehingga konfigurasi bind bisa dipanggil saat kita memulai project di bash script
 
 ### Membuat subdomain (nomor 4)
@@ -129,21 +131,20 @@ iface eth0 inet static
 
 ### Membuat reverse domain abimanyu (nomer 5)
 18.	Edit file /etc/bind/named.conf.local pada dns master
-19.	Tambah domain reverse dari ip abimanyu </br>
-![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/0dee95b3-ec2e-4f80-aa22-5c81910ac9e9)
+19.	Tambah domain reverse dari ip abimanyu 
 20.	Copykan file db.local dari path /etc/bind ke dalam folder prak1 yang baru saja dibuat dan ubah namanya menjadi 2.168.192.in-addr.arpa
 21.	Edit file 2.168.192.in-addr.arpa menjadi seperti gambar di bawah ini </br>
- ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/6d24d5df-fdb7-4b44-a360-75e5cc7c678e)
+![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/3b366553-e330-43a9-ad45-2f264ff54d53)
+
 22.	service bind9 restart
 23.	Untuk mengecek apakah konfigurasi sudah benar atau belum, lakukan perintah berikut pada client
-![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/bef2af5c-f2dd-4289-97af-23f2ca13830f) 
-Hasilnya </br>
-![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/4c9678b9-471a-4042-8e73-1378ac972035)
+![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/f772b833-06f3-4a6f-a76f-6c24f2295ee7)
+
 24.	Masukan apt-get update dan install dns utils ke /root/.bashscr client, agar otomatis dimulai saat memulai project.
 
 ### Membuat DNS slave untuk (nomor 6)
-25.	Pertama kita konfigurasi bind dns master, Edit file /etc/bind/named.conf.local dan sesuaikan dengan syntax berikut
- ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/48ece8a5-6e0e-4043-86d1-3b48072f917d)
+25.	Pertama kita konfigurasi bind dns master, Edit file /etc/bind/named.conf.local dan sesuaikan dengan syntax berikut </br>
+![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/ce8a30d7-333d-413a-92b6-80645349b121) </br>
 Tambahkan pada domain arjuna dan abimanyu
 ```
     notify yes;
@@ -173,15 +174,17 @@ Nameserver IP DNS slave
 *note masukan echo nameserver dns master dan slave, Juga masukan apt-get update dan install dns utils ke /root/.bashscr client, agar otomatis dimulai saat memulai project. </br>
 
 ### Membuat subdomain baratayuda di dns slave setelah diarahkan dari dns master (nomor 7 dan nomor 8) 
-32. pertama modifikasikonfigurasi abimanyu.d08.com pada /etc/bind/prak1 di dnsmaster untuk prefix baratayuda diarahkan ke dns slave menjadi
-![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/7c900e77-2749-4a48-94f8-c56689414c67)
+32. pertama modifikasikonfigurasi abimanyu.d08.com pada /etc/bind/prak1 di dnsmaster untuk prefix baratayuda diarahkan ke dns slave menjadi </br>
+![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/dc2c0983-94e4-437f-ae35-5747a0a00a37) </br>
+
 33. jangan lupa untuk modifikasi named.conf.options comment dnssec-validation auto; dan tambahkan allow-query{any;}; // pada dns master dan slave
 34. juga pastikan named.nonf.local domain abimanyu di beri allow transfer ke dns slave lalu restart bind9.
 35. Lalu modifikasi domain baratayuda.abimanyu.d08.com pada dns slave menjadi seperti berikut
-![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/9b290749-7259-43e3-92cf-ded0afb89da4)
+![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/aa2feb3c-5420-4cc9-bf0a-908d16f83ac6)
+
 36. Lalu buat direktori mkdir /etc/bind/delegasi dan buat file untuk mengkonfigurasi bind baratayuda dengan cp /etc/bind/db.local ke direktori didalam delegasi.
 37. kemudian edit file baratayuda... menjadi seperti berikut 
-![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/f9095378-7bba-4270-a5ed-c7da54c08b5b)
+![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/fe918a81-3922-4169-b815-9cfa99ee5dc7)
 38. Lakukan restart bind9 llalu testing dengan ping ke domain domain yang baru dibuat tersebut
 
 ### Nomor 9
@@ -234,27 +237,33 @@ mv abimanyu.yyy.com abimanyu.d08: Anda mengubah nama direktori yang telah diekst
 Menghapus File ZIP:
 rm -r abimanyu.d08.com.zip: Anda menghapus file ZIP yang telah diekstrak sebelumnya.
 Merestart Apache:
-service apache2 restart: Anda merestart layanan Apache untuk menerapkan konfigurasi baru.
+service apache2 restart: Anda merestart layanan Apache untuk menerapkan konfigurasi baru. hasilnya jika di lynx akan menghasilkan
+![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/1056702f-b2cb-4509-874d-3a65eafa2c82)
 
 ### Nomor 12
 konfigurasi /etc/apache2 menjadi seperti berikut</br>
-![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/30f65027-6ff8-4493-85e3-347baa265a03)</br>
+![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/e92c8e15-d222-45f5-9f1e-f35fc31509b9)
+</br>
 hasilnya lynx www.abimanyu.d08.com/home di client</br>
-![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/5e9461e3-f58e-4ffe-b00a-3e5ec9b91342)</br>
+![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/7b551372-6f01-48a6-b3f1-e7b3a53587f4)
+</br>
 
 ### Nomor 13
 lakukan hal yang sama dengan nomer 11, tetapi sekarang untuk parikesit abimanyu.. isinya di dapat dari wget ke drive yang sudah tertera.
 hasilnya jika kita lynx www.parikesit.abimanyu.d08.com di client akan menghasilkan</br>
-![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/77a82548-31a3-4c73-8819-83e46605f2e1)</br>
+![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/21dc6265-e64e-42f3-8a14-554ae3df824b)
+</br>
 akan muncul tampilan diatas, dimana kita bisa melihat directory listing sesuai isinya.
 
 ### Nomor 14
 Untuk nomor 14, konfigurasi parikesit.abimanyu seperti berikut</br>
-![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/8506a201-b2b9-447b-8594-7ea0f4f703d1)</br>
+![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/15b9d06d-b367-44d2-8560-9eb16f028040)
+</br>
 code tersebut memberi perintah agar folder secret tidak dapat diakses (403 forbidden).
 hasilnya jika kita coba buka adalah sebagai berikut</br>
-![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/7e104c83-7bcf-4d12-bc3b-d3bd1be6d342)
-![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/11e1803c-e778-4c7b-bbb2-32b306324609)
+![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/3a73a105-4652-4b5f-a2c9-270aeb3fc948)
+![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/b02b2055-0e89-4a22-8b49-e28d814deda2)
+
 
 
 ### Nomor 15
