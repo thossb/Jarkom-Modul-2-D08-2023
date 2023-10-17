@@ -35,7 +35,6 @@ PS:
 yyy pada url adalah kode kelompok anda
 File requirement dapat diakses melalui drive berikut.
 
-## Langkah - langkah penyelesaian
 ## IP ADDRESS KELOMPOK D08
 ### DNS Server:
 Werkudara (DNS Slave):
@@ -118,6 +117,7 @@ eth2: 192.195.2.1 (ke Web server)
 eth3: 192.195.3.1 (ke client)
 ```
 
+## PENYELESAIAN
 ### Setup nomor 1, 2, dan 3
 1.	Susun topologi dan koneksi seperti pada gambar di bawah.
 ![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/87381d4c-5abb-48f8-b2be-799ae314beaf)
@@ -806,12 +806,34 @@ __DAPAT DILIHAT BAHWA MUNCUL "RESTRICTED CONTENT"__
 
 ![Image18](./assets/images/NO18C.png)
 
+### ⭕ Nomor 19
+Buatlah agar setiap kali mengakses IP dari Abimanyu akan secara otomatis dialihkan ke www.abimanyu.yyy.com (alias)
 
+### 🟢 Jawaban Nomor 19
+### 1️⃣9️⃣ Setting Apache2 Pada Abimanyu
 
+- Pada file `/etc/apache2/sites-available/abimanyu.d08.com.conf` tambahkan konfigurasi berikut:
+```
+<VirtualHost *:80>
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/abimanyu.d08
+    ServerName 192.195.2.5
+    ServerAlias 192.195.2.5
+    Redirect permanent / http://www.abimanyu.d08.com/
+</VirtualHost>
+```
+![Image19](./assets/images/NO19A.png)
 
+- Setelah itu kita restart apache2-nya dengan command:
+```
+service apache2 restart
+```
 
+### 1️⃣9️⃣ Testing Nomor 19
 
+- `lynx 192.195.2.5`
 
+![Image19](./assets/images/NO19C.png) <br>
+⬆️Pada gambar di atas sudah menggunakan `www.abimanyu.d08.com`
 
-
-
+![Image19](./assets/images/NO19D.png)
