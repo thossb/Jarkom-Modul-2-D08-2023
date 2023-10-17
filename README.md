@@ -187,9 +187,76 @@ Nameserver IP DNS slave
 ### Nomor 9
 ### Nomor 10
 ### Nomor 11
+konfigurasi apache server untuk abimanyu
+```
+answer :
+apt-get install apache2 wget unzip -y
+apt-get install libapache2-mod-php7.0 -y
+
+cd /etc/apache2/sites-available
+cp 000-default.conf abimanyu.d08.com.conf
+
+----
+ tambahin
+ ServerName abimanyu.d08.com
+ ServerAlias www.abimanyu.d08.com
+----
+
+rm -r 000-default.conf
+a2ensite abimanyu.d08.com.conf
+
+cd /var/www/
+wget --no-check-certificate "https://drive.google.com/uc?export=download&id=1a4V23hwK9S7hQEDEcv9FL14UkkrHc-Zc" -O abimanyu.d08.com.zip
+unzip abimanyu.d08.com.zip
+mv abimanyu.yyy.com abimanyu.d08
+rm -r abimanyu.d08.com.zip
+service apache2 restart
+
+```
+Menginstal Apache dan Modul PHP:
+
+apt-get install apache2 wget unzip -y: Ini adalah perintah untuk menginstal Apache2, wget, dan unzip dengan opsi "-y" untuk mengonfirmasi pemasangan tanpa interaksi pengguna.
+apt-get install libapache2-mod-php7.0 -y: Ini menginstal modul PHP versi 7.0 yang diperlukan untuk menjalankan skrip PHP di server.
+Membuat Konfigurasi Situs Baru:
+cd /etc/apache2/sites-available: Anda berpindah ke direktori konfigurasi situs Apache.
+cp 000-default.conf abimanyu.d08.com.conf: Anda membuat salinan file konfigurasi default dengan nama domain baru "abimanyu.d08.com.conf".
+Mengedit Konfigurasi Situs:
+Anda menambahkan informasi ServerName dan ServerAlias ke dalam file konfigurasi situs baru "abimanyu.d08.com.conf" untuk menentukan nama domain dan alias yang akan digunakan oleh situs.
+Menghapus Konfigurasi Situs Default:
+rm -r 000-default.conf: Anda menghapus konfigurasi situs default yang tidak diperlukan lagi.
+Mengaktifkan Konfigurasi Situs Baru:
+a2ensite abimanyu.d08.com.conf: Anda mengaktifkan konfigurasi situs baru dengan perintah ini.
+Mengunduh dan Menginstal Konten Situs Web:
+cd /var/www/: Anda berpindah ke direktori root web server.
+wget --no-check-certificate "https://drive.google.com/uc?export=download&id=1a4V23hwK9S7hQEDEcv9FL14UkkrHc-Zc" -O abimanyu.d08.com.zip: Anda mengunduh file ZIP yang berisi konten situs web.
+unzip abimanyu.d08.com.zip: Anda mengekstrak isi ZIP.
+mv abimanyu.yyy.com abimanyu.d08: Anda mengubah nama direktori yang telah diekstrak menjadi "abimanyu.d08" (sepertinya ini adalah kesalahan ketik, seharusnya "abimanyu.d08.com" sesuai dengan nama domain).
+Menghapus File ZIP:
+rm -r abimanyu.d08.com.zip: Anda menghapus file ZIP yang telah diekstrak sebelumnya.
+Merestart Apache:
+service apache2 restart: Anda merestart layanan Apache untuk menerapkan konfigurasi baru.
+
 ### Nomor 12
+konfigurasi /etc/apache2 menjadi seperti berikut</br>
+![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/30f65027-6ff8-4493-85e3-347baa265a03)</br>
+hasilnya lynx www.abimanyu.d08.com/home di client</br>
+![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/5e9461e3-f58e-4ffe-b00a-3e5ec9b91342)</br>
+
 ### Nomor 13
+lakukan hal yang sama dengan nomer 11, tetapi sekarang untuk parikesit abimanyu.. isinya di dapat dari wget ke drive yang sudah tertera.
+hasilnya jika kita lynx www.parikesit.abimanyu.d08.com di client akan menghasilkan</br>
+![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/77a82548-31a3-4c73-8819-83e46605f2e1)</br>
+akan muncul tampilan diatas, dimana kita bisa melihat directory listing sesuai isinya.
+
 ### Nomor 14
+Untuk nomor 14, konfigurasi parikesit.abimanyu seperti berikut</br>
+![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/8506a201-b2b9-447b-8594-7ea0f4f703d1)</br>
+code tersebut memberi perintah agar folder secret tidak dapat diakses (403 forbidden).
+hasilnya jika kita coba buka adalah sebagai berikut</br>
+![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/7e104c83-7bcf-4d12-bc3b-d3bd1be6d342)
+![image](https://github.com/thossb/Jarkom-Modul-2-D08-2023/assets/90438426/11e1803c-e778-4c7b-bbb2-32b306324609)
+
+
 ### Nomor 15
 ### Nomor 16
 ### Nomor 17
